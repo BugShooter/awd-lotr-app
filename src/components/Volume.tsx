@@ -14,8 +14,8 @@ export default function Volume({ volumeData }: { volumeData: VolumeData }) {
                 <Image
                     src={volumeData.cover}
                     alt={volumeData.title}
-                    width={200}
-                    height={300}
+                    width={140}
+                    height={230}
                 />
                 <div className="flex-1 w-full flex flex-col gap-4">
                     <Link href="/volumes" className="mb-4 inline-block">← All Volumes</Link>
