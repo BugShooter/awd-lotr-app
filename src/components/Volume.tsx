@@ -1,7 +1,7 @@
-import { VolumeData } from "@/types/global";
 import Link from "next/link";
+import Image from "next/image";
+import { VolumeData } from "@/types/global";
 import { volumes } from "../lib/data";
-
 
 export default function Volume({ volumeData }: { volumeData: VolumeData }) {
     const volumeIndex = volumes.findIndex(v => v.slug === volumeData.slug);
@@ -10,18 +10,28 @@ export default function Volume({ volumeData }: { volumeData: VolumeData }) {
 
     return (
         <>
-            <Link href="/volumes">← All Volumes</Link>
-            <h1>{volumeData?.title}</h1>
-            <p>{volumeData?.description}</p>
-            <ul>
-                {volumeData?.books.map(book => (
-                    <li key={book.ordinal}>{book?.ordinal}: {book?.title}</li>
-                ))}
-            </ul >
-            <nav className="flex gap-4 items-center flex-row">
-                {prevVolume && (<Link href={prevVolume.slug}>← Prev</Link>)}
-                {nextVolume && (<Link href={nextVolume.slug}>Next →</Link>)}
-            </nav>
+            <div className="flex flex-col sm:flex-row-reverse gap-8 items-center sm:items-start sm:items-stretch">
+                <Image
+                    src={volumeData.cover}
+                    alt={volumeData.title}
+                    width={200}
+                    height={300}
+                />
+                <div className="flex-1 w-full flex flex-col gap-4">
+                    <Link href="/volumes" className="mb-4 inline-block">← All Volumes</Link>
+                    <h1>{volumeData?.title}</h1>
+                    <p>{volumeData?.description}</p>
+                    <ul>
+                        {volumeData?.books.map(book => (
+                            <li key={book.ordinal}>{book?.ordinal}: {book?.title}</li>
+                        ))}
+                    </ul >
+                    <nav className="flex gap-4 items-center flex-row mt-auto">
+                        {prevVolume && (<Link href={prevVolume.slug}>← Prev</Link>)}
+                        {nextVolume && (<Link href={nextVolume.slug}>Next →</Link>)}
+                    </nav>
+                </div>
+            </div>
         </>
     )
 }
