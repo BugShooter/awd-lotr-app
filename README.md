@@ -86,6 +86,89 @@ Use a width of 140px and a height of 230px for the cover image.
 
 Create a layout component in `src/app/layout.tsx` that wraps all pages. This component should include a header with the title "Lord of the Rings" and a footer with your name.
 
+### Create a 404 Error Page
+
+Create a custom 404 error page in `src/app/not-found.tsx`. This page should display a message indicating that the page was not found.
+
+In case when your component has take the control but you cannot find the data you need, you can use the `notFound` function to render a custom 404 page. For example:
+
+```tsx
+// src/app/volumes/[slug]/page.tsx
+import { notFound } from 'next/navigation';
+
+export default function NotFound({ params: { slug } }) {
+  const volume = volumes.find(({ slug: volumeSlug }) => volumeSlug === slug);
+  // If the volume is not found, render a 404 page
+  if (!volume) {
+    notFound();
+  }
+  return (<Volume volumeData={volume} />);
+}
+```
+
+### Create a Custom 500 Error Page
+
+Create a custom 500 error page in `src/app/error.tsx`. This page should display a message indicating that an internal server error occurred.
+
+```tsx
+// src/app/error.tsx
+"use client";
+
+export default function Error() {
+  // This component is rendered when an error occurs
+}
+```
+
+### Create a Loading State
+
+Create a loading state in `src/app/loading.tsx`. This component should display a loading spinner or message while the data is being fetched.
+
+```tsx
+// src/app/loading.tsx
+export default function Loading() {
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-blue-500"></div>
+    </div>
+  );
+}
+```
+
+### Simulate a Loading State
+
+To test the loading state, you can simulate a delay in a server component by using a Promise with a timeout:
+
+```tsx
+// src/app/volumes/page.tsx
+// Your component imports
+
+// Make component async to use await
+export default async function VolumesPage() {
+  // Simulate a delay in data fetching
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  return ({/* Your component code */});
+}
+```
+
+## Troubleshooting, Common Errors and Notes
+
+### You cannot use a server component directly inside a client component
+
+Server components can only be rendered by other server components. If you need to use server logic inside a client component, move it to an API route or a parent server component.
+
+### You cannot use useEffect in server components
+
+Server components run on the server and have no access to browser APIs or React lifecycle hooks such as useEffect. If you need side effects, use a client component ("use client").
+
+### `loading.tsx` does not work for pure client components
+
+In the Next.js App Router, the `loading.tsx` file is only triggered for segments with server-side rendering and/or async data fetching on the server. If a page is fully client-rendered and does not wait for server data, `loading.tsx` will appear only briefly or not at all. To test it, wrap the client component in a parent server component with an artificial delay.
+
+### `error.tsx` must always be a client component
+
+The `error.tsx` file is rendered on the client side even when an error happens on the server. Therefore, it must include "use client" and can use React hooks.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
