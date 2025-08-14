@@ -1,7 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { VolumeData } from "@/types/global";
-import { volumes } from "../lib/data";
+import { volumes } from "@/lib/data";
 
 export default function Volume({ volumeData }: { volumeData: VolumeData }) {
     const volumeIndex = volumes.findIndex(v => v.slug === volumeData.slug);
